@@ -242,4 +242,8 @@ Content-Type: application/json
 
 ![Folder structure](assets/clean-architecture-img.jpg)
 
+## OutPut
+
+![Output](assets/swagger.png)
+
 ### Thank you
