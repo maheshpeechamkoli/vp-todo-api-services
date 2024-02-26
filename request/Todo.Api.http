@@ -1,0 +1,36 @@
+@host=http://localhost:5148/api/v1.0
+
+### Create
+POST  {{host}}/todo/add
+Content-Type: application/json
+
+{
+  "task": "Take Medicine",
+  "deadline": "2024-02-25T09:42:31.580Z"
+}
+
+### List
+
+GET  {{host}}/todo/list
+Content-Type: application/json
+
+### Update
+PUT  {{host}}/todo/update
+Content-Type: application/json
+
+{
+  "id": "546ab703-7850-46df-88be-1276167b569c",
+  "task":"New Update added",
+  "deadline": "2025-03-23",
+  "isdone": false
+}
+
+### Mark as done
+
+PATCH {{host}}/todo/mark-as-done/546ab703-7850-46df-88be-1276167b569c/true
+Content-Type: application/json
+
+### Delete
+
+DELETE  {{host}}/todo/delete/73e96d13-195f-4c89-a9fc-6d7c4c591f64
+Content-Type: application/json

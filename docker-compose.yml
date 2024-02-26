@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: todo-service-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5148:5148"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    restart: on-failure
