@@ -13,7 +13,7 @@ Robust ASP.NET Core Web API Service for CRUD Operations with Clean Architecture 
 
 ## Getting Started
 
-Todo Api is using ASP.NET Core Web API (.net8). This service will allow basic operations like Add, Get all, Update, Mark as done, delete the tasks.
+Todo Api is using ASP.NET Core Web API (.net8). This service will allow basic operations like Add, Get all, Update, Mark as done, delete the task.
 
 ### Installation
 
