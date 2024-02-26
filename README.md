@@ -23,7 +23,7 @@ Open your terminal or command prompt, go to the desired directory, and use the f
 
 ```
 git clone https://github.com/maheshpeechamkoli/vp-todo-api-services.git
-cd todo-service
+cd vp-todo-api-services
 ```
 
 ### Running the Application using Docker
