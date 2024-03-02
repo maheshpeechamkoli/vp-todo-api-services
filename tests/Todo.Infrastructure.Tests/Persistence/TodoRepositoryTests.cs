@@ -7,12 +7,12 @@ using Todo.Domain.Entities;
 public class TodoRepositoryTests
 {
     private readonly IFixture _fixture;
-    private readonly TodoRepository _repository;
+    private readonly TodoRepository _sut;
 
     public TodoRepositoryTests()
     {
         _fixture = new Fixture();
-        _repository = new TodoRepository();
+        _sut = new TodoRepository();
     }
 
     [Fact]
@@ -22,10 +22,10 @@ public class TodoRepositoryTests
         var todo = new Todo { Id = Guid.NewGuid(), Task = "New Task", Deadline = DateTime.UtcNow.AddDays(1), IsDone = false };
 
         // Act
-        await _repository.AddTodoAsync(todo);
+        await _sut.AddTodoAsync(todo);
 
         // Assert
-        var addedTodo = (await _repository.GetAllTodosAsync()).FirstOrDefault(t => t.Id == todo.Id);
+        var addedTodo = (await _sut.GetAllTodosAsync()).FirstOrDefault(t => t.Id == todo.Id);
         Assert.NotNull(addedTodo);
         Assert.Equal("New Task", addedTodo.Task);
     }
@@ -38,11 +38,11 @@ public class TodoRepositoryTests
         var todo2 = new Todo { Id = Guid.NewGuid(), Task = "Testing Task 2", Deadline = DateTime.UtcNow.AddDays(2), IsDone = false };
 
         // Act
-        await _repository.AddTodoAsync(todo1);
-        await _repository.AddTodoAsync(todo2);
+        await _sut.AddTodoAsync(todo1);
+        await _sut.AddTodoAsync(todo2);
 
         // Assert
-        var allTodos = await _repository.GetAllTodosAsync();
+        var allTodos = await _sut.GetAllTodosAsync();
         Assert.Contains(todo1, allTodos);
         Assert.Contains(todo2, allTodos);
     }
@@ -52,15 +52,15 @@ public class TodoRepositoryTests
     {
         // Arrange
         var originalTodo = new Todo { Id = Guid.NewGuid(), Task = "Original Task", Deadline = DateTime.UtcNow.AddDays(1), IsDone = false };
-        await _repository.AddTodoAsync(originalTodo);
+        await _sut.AddTodoAsync(originalTodo);
 
         var updatedTodo = new Todo { Id = originalTodo.Id, Task = "Updated Task", Deadline = originalTodo.Deadline, IsDone = !originalTodo.IsDone };
 
         // Act
-        await _repository.UpdateTodoAsync(updatedTodo);
+        await _sut.UpdateTodoAsync(updatedTodo);
 
         // Assert
-        var allTodos = await _repository.GetAllTodosAsync();
+        var allTodos = await _sut.GetAllTodosAsync();
         var todoAfterUpdate = allTodos.FirstOrDefault(t => t.Id == originalTodo.Id);
 
         Assert.NotNull(todoAfterUpdate);
@@ -73,13 +73,13 @@ public class TodoRepositoryTests
     {
         // Arrange
         var todo = new Todo { Id = Guid.NewGuid(), Task = "Task to be done", Deadline = DateTime.UtcNow.AddDays(1), IsDone = false };
-        await _repository.AddTodoAsync(todo);
+        await _sut.AddTodoAsync(todo);
 
         // Act
-        await _repository.MarkTodoAsync(todo.Id, true);
+        await _sut.MarkTodoAsync(todo.Id, true);
 
         // Assert
-        var allTodos = await _repository.GetAllTodosAsync();
+        var allTodos = await _sut.GetAllTodosAsync();
         var markedTodo = allTodos.FirstOrDefault(t => t.Id == todo.Id);
         Assert.NotNull(markedTodo);
         Assert.True(markedTodo.IsDone);
@@ -90,13 +90,13 @@ public class TodoRepositoryTests
     {
         // Arrange
         var todo = new Todo { Id = Guid.NewGuid(), Task = "Task to delete", Deadline = DateTime.UtcNow.AddDays(1), IsDone = false };
-        await _repository.AddTodoAsync(todo);
+        await _sut.AddTodoAsync(todo);
 
         // Act
-        await _repository.DeleteTodoAsync(todo.Id);
+        await _sut.DeleteTodoAsync(todo.Id);
 
         // Assert
-        var allTodos = await _repository.GetAllTodosAsync();
+        var allTodos = await _sut.GetAllTodosAsync();
         var deletedTodo = allTodos.FirstOrDefault(t => t.Id == todo.Id);
         Assert.Null(deletedTodo);
     }

@@ -27,12 +27,10 @@ public partial class TodoServiceTests
     public async Task AddTodoAsync_CallsRepositoryWithCorrectTodo()
     {
         // Arrange
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         var request = new AddTodoRequest("TestTaskForToday", DateTime.UtcNow.AddDays(1));
 
         // Act
-        await service.AddTodoAsync(request);
+        await _sut.AddTodoAsync(request);
 
         // Assert
         _repositoryMock.Verify(repo => repo.AddTodoAsync(It.Is<Todo>(t => t.Task == request.Task && t.Deadline == request.Deadline)), Times.Once);
@@ -41,11 +39,8 @@ public partial class TodoServiceTests
     [Fact]
     public async Task AddTodoAsync_ThrowsArgumentNullException_WhenRequestIsNull()
     {
-        // Arrange
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.AddTodoAsync(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.AddTodoAsync(null!));
     }
 
     [Fact]
@@ -69,13 +64,10 @@ public partial class TodoServiceTests
                 IsDone = true
             }
         };
-
         _repositoryMock.Setup(repo => repo.GetAllTodosAsync()).ReturnsAsync(expectedTodos);
 
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         // Act
-        var todos = await service.GetAllTodosAsync();
+        var todos = await _sut.GetAllTodosAsync();
 
         // Assert
         Assert.Equal(expectedTodos, todos);
@@ -84,18 +76,14 @@ public partial class TodoServiceTests
     [Fact]
     public async Task UpdateTodoAsync_ThrowsArgumentNullException_WhenRequestIsNull()
     {
-        // Arrange
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateTodoAsync(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.UpdateTodoAsync(null!));
     }
 
     [Fact]
     public async Task UpdateTodoAsync_SuccessfullyUpdatesTodo_WhenRequestIsValid()
     {
         // Arrange
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
         var request = new UpdateTodoRequest(
             Guid.NewGuid(),
             "Updated Task",
@@ -104,7 +92,7 @@ public partial class TodoServiceTests
         );
 
         // Act
-        await service.UpdateTodoAsync(request);
+        await _sut.UpdateTodoAsync(request);
 
         // Assert
         _repositoryMock.Verify(repo => repo.UpdateTodoAsync(It.Is<Todo>(t =>
@@ -121,10 +109,8 @@ public partial class TodoServiceTests
         var validId = Guid.NewGuid();
         var isDone = true;
 
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         // Act
-        await service.MarkTodoAsDoneAsync(validId, isDone);
+        await _sut.MarkTodoAsDoneAsync(validId, isDone);
 
         // Assert
         _repositoryMock.Verify(repo => repo.MarkTodoAsync(validId, isDone), Times.Once);
@@ -137,10 +123,8 @@ public partial class TodoServiceTests
         var invalidId = Guid.Empty;
         var isDone = true;
 
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.MarkTodoAsDoneAsync(invalidId, isDone));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.MarkTodoAsDoneAsync(invalidId, isDone));
     }
 
     [Fact]
@@ -149,10 +133,8 @@ public partial class TodoServiceTests
         // Arrange
         var validId = Guid.NewGuid();
 
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         // Act
-        await service.DeleteTodoAsync(validId);
+        await _sut.DeleteTodoAsync(validId);
 
         // Assert
         _repositoryMock.Verify(repo => repo.DeleteTodoAsync(validId), Times.Once);
@@ -164,9 +146,7 @@ public partial class TodoServiceTests
         // Arrange
         var invalidId = Guid.Empty;
 
-        var service = new TodoService(_repositoryMock.Object, _loggerMock.Object);
-
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.DeleteTodoAsync(invalidId));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.DeleteTodoAsync(invalidId));
     }
 }
